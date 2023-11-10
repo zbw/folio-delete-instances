@@ -1,0 +1,9 @@
+# ignore tenant related files
+okapi_token
+okapi_url
+tenant
+
+# ignore directories created during runtime
+data/
+hrid/
+log_deleted_records
