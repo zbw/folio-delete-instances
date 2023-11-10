@@ -22,7 +22,7 @@ fi
 # Output file
 output_file="${input_file}_deleted_${timestamp}.json"
 
-read -p "Are you sure? Then type \"y\" to proceed: " -n 1 -r
+read -p "Are you sure you want to DELETE these instances? Then type \"y\" to proceed: " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
