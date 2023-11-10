@@ -22,9 +22,9 @@ fi
 # Output file
 output_file="${input_file}_deleted_${timestamp}.json"
 
-read -p "Are you sure? " -n 1 -r
+read -p "Are you sure? Then type \"y\" to proceed: " -n 1 -r
 echo    # (optional) move to a new line
-if [[ $REPLY =~ ^[YyJy]$ ]]
+if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
     # Loop through each line in the input file and write the result into file
@@ -42,6 +42,9 @@ then
     mv ${output_file} ${deletedRecordDir}
 
     echo "Script completed. See logs in ${deletedRecordDir}/${output_file}."
+
+else
+    echo "Operation aborted."
 
 fi
 
