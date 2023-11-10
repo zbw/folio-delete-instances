@@ -40,7 +40,7 @@ As the instance HRID == the PPN of a K10plus title in GBV, this step can be skip
 ./delete_instances_by_hrid.sh <file with instance HRID's>
 ```
 
-7. The process is being logged and the logs are written into a subdirectory log_deleted_records
+7. You have to confirm the deletion before the request is being processed. The delete process is logged and the logs are written into a subdirectory log_deleted_records
 
 
 # Authors
