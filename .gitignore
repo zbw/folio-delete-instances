@@ -7,3 +7,6 @@ tenant
 data/
 hrid/
 log_deleted_records
+
+# ignore another file
+-H
