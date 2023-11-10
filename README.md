@@ -31,6 +31,9 @@ As the instance HRID == the PPN of a K10plus title in GBV, this step can be skip
 ```
 
 5. After the script ran successfully, it will move the file with the instance UUID's and the JSON file with the full instance records into a subdirectory ```data```. A file with the instance HRID's is stored in the subdirectory ```hrid```.
+
+## Delete instances, their holdings, items and relations
+
 6. Now we're ready to delete the instances by sending a DELETE with the HRID's to ```/inventory-upsert-hrid``` by calling
 
 ```
