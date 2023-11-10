@@ -41,7 +41,7 @@ then
 
     mv ${output_file} ${deletedRecordDir}
 
-    echo "Script completed. See logs in ${deletedRecordDir}/${output_file}."
+    echo "Script completed. See logs in ${deletedRecordDir}."
 
 else
     echo "Operation aborted."
