@@ -31,7 +31,7 @@ then
     while IFS= read -r uuid || [ "${uuid}" ]; do
         uuid_cleaned=$(echo "${uuid}" | tr -d '\r' | xargs)
         echo "Processing UUID: ${uuid}"
-        result=$(curl -s -w '\n' -X PUT -d "{ \"suppressFromDiscovery\": true }" -H "Content-type: application/json" -H "x-okapi-tenant: ${tenant}" -H "x-okapi-token: ${okapi_token}" "${okapi_url}/erm/titles/${uuid_cleaned}")
+        result=$(curl -s -w '\n' -X PUT -d "{ \"suppressFromDiscovery\": false }" -H "Content-type: application/json" -H "x-okapi-tenant: ${tenant}" -H "x-okapi-token: ${okapi_token}" "${okapi_url}/erm/titles/${uuid_cleaned}")
         echo "$result" >> "${output_file}"
     done < "$input_file"
 
