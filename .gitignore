@@ -9,6 +9,7 @@ Inventory/hrid/
 Inventory/log_deleted_records
 
 Agreements/log_updated_records
+Agreements/data
 
 # ignore another file
 Inventory/-H
