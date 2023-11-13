@@ -1,4 +1,4 @@
-# FOLIO delete instance records in Inventory
+# FOLIO scripts
 
 ## Disclaimer
 
