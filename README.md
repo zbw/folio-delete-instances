@@ -6,7 +6,7 @@ Use the delete script with extreme caution! Once called and confirmed, all insta
 
 ## Use
 
-Most scripts here require the jq utility to use. All assume you have the following files in the working directory:
+The scripts require the jq utility to use. All assume you have the following files in the working directory:
 
 - *tenant* -- contains the ID of the FOLIO tenant
 - *okapi_url* -- contains the Okapi URL for the tenant
