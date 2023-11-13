@@ -1,3 +1,5 @@
+# FOLIO delete instance records in Inventory
+
 ## Disclaimer
 
 Use the delete script with extreme caution! Once called and confirmed, all instances listed in the input file, including their holdings, items, and relations will be **deleted** in the given tenant. This is irreversible.
