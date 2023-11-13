@@ -18,6 +18,7 @@ agreement_json_output="${agreement_uuid}_${timestamp}.json"
 
 # Agreement export API
 # /erm/sas/resources/export
+echo "Exporting agreement ..."
 agreement_uuid_cleaned=$(echo "${agreement_uuid}" | tr -d '\r' | xargs)
 agreement_json=$(curl -s -w '\n' -H "Content-type: application/json" -H "x-okapi-tenant: ${tenant}" -H "x-okapi-token: ${okapi_token}" "${okapi_url}/erm/sas/${agreement_uuid_cleaned}/resources/export")
 echo "$agreement_json" >"${agreement_json_output}"
@@ -33,17 +34,19 @@ while IFS= read -r zdb_id || [ "${zdb_id}" ]; do
     jq '.[] | select(.title.identifiers[].identifier.value | contains('\"${zdb_id_cleaned}\"'))' "${agreement_json_output}" >> "${agreements_json_filtered_by_zdb_id}"
 done < "${zdb_id_file}"
 
-agreements_json_filtered_by_zdb_id_uuid_extract="${agreements_json_filtered_by_zdb_id}_uuids.json"
+agreements_json_filtered_by_zdb_id_uuid_extract="${agreements_json_filtered_by_zdb_id}_uuids.txt"
 
 # Extract titleInstance UUID's
 jq -r '.title.id' "${agreements_json_filtered_by_zdb_id}" | sort | uniq > "${agreements_json_filtered_by_zdb_id_uuid_extract}"
 
 dataDir="data"
+uuidDir="uuid"
 
 [ ! -d "$dataDir" ] && mkdir -p "$dataDir"
+[ ! -d "$uuidDir" ] && mkdir -p "$uuidDir"
+
 
 mv ${agreement_json_output} ${dataDir}
 mv ${zdb_id_file} ${dataDir}
 mv ${agreements_json_filtered_by_zdb_id} ${dataDir}
-mv ${agreements_json_filtered_by_zdb_id_uuid_extract} ${dataDir}
-
+mv ${agreements_json_filtered_by_zdb_id_uuid_extract} ${uuidDir}

@@ -12,6 +12,7 @@ if [ "$#" -ne 1 ]; then
 fi
 
 input_file="$1"
+suppress_switch="true"
 
 # Check whether the input file exists
 if [ ! -f "${input_file}" ]; then
@@ -22,7 +23,7 @@ fi
 # Output file
 output_file="${input_file}_updated_${timestamp}.json"
 
-read -p "Are you sure you want to UPDATE these PTI's? Then type \"y\" to proceed: " -n 1 -r
+read -p "Are you sure you want to UPDATE these titleInstances? Then type \"y\" to proceed: " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -31,7 +32,7 @@ then
     while IFS= read -r uuid || [ "${uuid}" ]; do
         uuid_cleaned=$(echo "${uuid}" | tr -d '\r' | xargs)
         echo "Processing UUID: ${uuid}"
-        result=$(curl -s -w '\n' -X PUT -d "{ \"suppressFromDiscovery\": false }" -H "Content-type: application/json" -H "x-okapi-tenant: ${tenant}" -H "x-okapi-token: ${okapi_token}" "${okapi_url}/erm/titles/${uuid_cleaned}")
+        result=$(curl -s -w '\n' -X PUT -d "{ \"suppressFromDiscovery\": ${suppress_switch} }" -H "Content-type: application/json" -H "x-okapi-tenant: ${tenant}" -H "x-okapi-token: ${okapi_token}" "${okapi_url}/erm/titles/${uuid_cleaned}")
         echo "$result" >> "${output_file}"
     done < "$input_file"
 
