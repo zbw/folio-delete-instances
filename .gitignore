@@ -4,9 +4,12 @@ okapi_url
 tenant
 
 # ignore directories created during runtime
-data/
-hrid/
-log_deleted_records
+Inventory/data/
+Inventory/hrid/
+Inventory/log_deleted_records
+
+Agreements/log_updated_records
 
 # ignore another file
--H
+Inventory/-H
+Agreements/-H
