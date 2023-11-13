@@ -10,6 +10,7 @@ Inventory/log_deleted_records
 
 Agreements/log_updated_records
 Agreements/data
+Agreements/uuid
 
 # ignore another file
 Inventory/-H
