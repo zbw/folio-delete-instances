@@ -35,13 +35,13 @@ then
         echo "$result" >> "${output_file}"
     done < "$input_file"
 
-    deletedRecordDir="log_deleted_records"
+    deleted_record_dir="log_deleted_records"
 
-    [ ! -d "$deletedRecordDir" ] && mkdir -p "$deletedRecordDir"
+    [ ! -d "$deleted_record_dir" ] && mkdir -p "$deleted_record_dir"
 
-    mv ${output_file} ${deletedRecordDir}
+    mv ${output_file} ${deleted_record_dir}
 
-    echo "Script completed. See logs in ${deletedRecordDir}."
+    echo "Script completed. See logs in ${deleted_record_dir}."
 
 else
     echo "Operation aborted."

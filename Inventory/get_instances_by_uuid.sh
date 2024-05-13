@@ -36,14 +36,14 @@ hrid_file="${output_file}_hrids.txt"
 echo "Extracting instance HRID's"
 jq -r '.hrid' ${output_file} > ${hrid_file}
 
-dataDir="data"
-hridDir="hrid"
+data_dir="data"
+hrid_dir="hrid"
 
-[ ! -d "$dataDir" ] && mkdir -p "$dataDir"
-[ ! -d "$hridDir" ] && mkdir -p "$hridDir"
+[ ! -d "$data_dir" ] && mkdir -p "$data_dir"
+[ ! -d "$hrid_dir" ] && mkdir -p "$hrid_dir"
 
-mv ${input_file} ${dataDir}
-mv ${output_file} ${dataDir}
-mv ${hrid_file} ${hridDir}
+mv ${input_file} ${data_dir}
+mv ${output_file} ${data_dir}
+mv ${hrid_file} ${hrid_dir}
 
-echo "Script completed. See instance HRID's in file ${hridDir}/${hrid_file}"
+echo "Script completed. See instance HRID's in file ${hrid_dir}/${hrid_file}"
