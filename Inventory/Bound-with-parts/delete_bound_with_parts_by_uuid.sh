@@ -6,9 +6,9 @@ okapi_url=$(cat "`dirname $0`"/../../okapi_url)
 timestamp=$(date +%Y%m%d_%H%M%S)
 
 # Log directory and output file setup
-deletedRecordDir="log_deleted_bound_with_parts"
-output_file="${deletedRecordDir}/deleted_ids_${timestamp}.log"
-[ ! -d "$deletedRecordDir" ] && mkdir -p "$deletedRecordDir"
+deleted_record_dir="log_deleted_bound_with_parts"
+output_file="${deleted_record_dir}/deleted_ids_${timestamp}.log"
+[ ! -d "$deleted_record_dir" ] && mkdir -p "$deleted_record_dir"
 
 # Show record count
 response=$(curl -s -X GET -H "x-okapi-tenant: ${tenant}" -H "x-okapi-token: ${okapi_token}" "${okapi_url}/inventory-storage/bound-with-parts?limit=0")
