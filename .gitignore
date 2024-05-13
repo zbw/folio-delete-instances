@@ -4,9 +4,10 @@ okapi_url
 tenant
 
 # ignore directories created during runtime
-Inventory/data/
-Inventory/hrid/
-Inventory/log_deleted_records
+Inventory/Instances/data/
+Inventory/Instances/hrid/
+Inventory/Instances/log_deleted_records
+Inventory/Bound-with-parts/log_deleted_bound_with_parts/
 
 Agreements/log_updated_records
 Agreements/data

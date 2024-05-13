@@ -1,8 +1,8 @@
 #!/bin/bash
 
-tenant=$(cat "`dirname $0`"/../tenant)
-okapi_token=$(cat "`dirname $0`"/../okapi_token)
-okapi_url=$(cat "`dirname $0`"/../okapi_url)
+tenant=$(cat "`dirname $0`"/../../tenant)
+okapi_token=$(cat "`dirname $0`"/../../okapi_token)
+okapi_url=$(cat "`dirname $0`"/../../okapi_url)
 timestamp=$(date +%Y%m%d_%H%M%S)
 
 # Check whether the argument for the input file has been specified
