@@ -12,7 +12,7 @@ if [ "$#" -ne 1 ]; then
 fi
 
 input_file="$1"
-suppress_switch="false"
+suppress_switch="true"
 
 # Check whether the input file exists
 if [ ! -f "${input_file}" ]; then
