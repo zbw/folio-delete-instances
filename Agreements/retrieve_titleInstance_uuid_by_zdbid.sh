@@ -23,6 +23,13 @@ agreement_uuid_cleaned=$(echo "${agreement_uuid}" | tr -d '\r' | xargs)
 agreement_json=$(curl -s -w '\n' -H "Content-type: application/json" -H "x-okapi-tenant: ${tenant}" -H "x-okapi-token: ${okapi_token}" "${okapi_url}/erm/sas/${agreement_uuid_cleaned}/resources/export")
 echo "$agreement_json" >"${agreement_json_output}"
 
+# Check if the JSON is valid
+if ! echo "$agreement_json" | jq . > /dev/null 2>&1; then
+    echo "Error: Invalid JSON received from server"
+    exit 1
+fi
+echo "$agreement_json" >"${agreement_json_output}"
+
 # File with ZDB-ID's
 zdb_id_file="$2"
 agreements_json_filtered_by_zdb_id="${agreement_uuid}_${timestamp}_${zdb_id_file}.json"
@@ -31,7 +38,7 @@ agreements_json_filtered_by_zdb_id="${agreement_uuid}_${timestamp}_${zdb_id_file
 while IFS= read -r zdb_id || [ "${zdb_id}" ]; do
     zdb_id_cleaned=$(echo "${zdb_id}" | tr -d '\r' | xargs)
     echo "Processing ZDB-ID: ${zdb_id_cleaned}"
-    jq '.[] | select(.title.identifiers[].identifier.value | contains('\"${zdb_id_cleaned}\"'))' "${agreement_json_output}" >> "${agreements_json_filtered_by_zdb_id}"
+    jq --arg zdb_id "${zdb_id_cleaned}" '.[] | select(.title.identifiers[]?.identifier.value == $zdb_id)' "${agreement_json_output}" >> "${agreements_json_filtered_by_zdb_id}"
 done < "${zdb_id_file}"
 
 agreements_json_filtered_by_zdb_id_uuid_extract="${agreements_json_filtered_by_zdb_id}_uuids.txt"
