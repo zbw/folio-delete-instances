@@ -13,6 +13,9 @@ Agreements/log_updated_records
 Agreements/data
 Agreements/uuid
 
+Users/cookiefile
+Users/perms
+
 # ignore another file
 Inventory/-H
 Agreements/-H
