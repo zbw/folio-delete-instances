@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Pass the userId as a command line parameter to this script.
+# The frontend shows the userId in the URL of the user view, for example b4cee18d-f862-4ef1-95a5-879fdd619603 in
+# https://folio-snapshot.dev.folio.org/users/preview/b4cee18d-f862-4ef1-95a5-879fdd619603?query=sheldon
+
+if [ $# -ne 1 ]; then
+  echo 1>&2 "$0: Expected one userId argument, but got $# arguments"
+  exit 2
+fi
+
+OKAPI="${OKAPI:-https://okapi.gbv.de}"
+OKAPIURL="${OKAPIURL:-${OKAPI}}"
+TENANT="${TENANT:-minerva1}"
+OKAPIUSERNAME="${OKAPIUSERNAME:-xxx}"
+OKAPIPASSWORD="${OKAPIPASSWORD:-xxx!}"
+LOGIN=$( jq -n -c --arg username "$OKAPIUSERNAME" --arg password "$OKAPIPASSWORD" '{"username": $username, "password": $password}' )
+echo "TENANT: $TENANT, OKAPI: $OKAPI, URL: $OKAPI/perms/users/$1"
+curl -w"\n" -sS -D - -H "X-Okapi-Tenant: $TENANT" -H "Content-type: application/json" -d "$LOGIN" -c cookiefile $OKAPI/authn/login-with-expiry
+PERMS=$( curl -w"\n" -sS -H "X-Okapi-Tenant: $TENANT" -H "X-Okapi-URL: $OKAPIRUL" -H "Accept: application/json" -b cookiefile \
+              "$OKAPI/perms/users/$1?indexField=userId" )
+ID=$( echo "$PERMS" | jq -r '.id' )
+echo "$PERMS" | jq . | wc
+echo "$PERMS" | jq '.permissions |= unique' > perms
+cat perms | wc
+curl -w"\n" -sS -D - -H "X-Okapi-Tenant: $TENANT" -H "Content-type: application/json" -H "Accept: application/json" -b cookiefile \
+        -XPUT "$OKAPI/perms/users/$ID" -d '@perms'
