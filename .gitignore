@@ -16,6 +16,8 @@ Agreements/uuid
 Users/cookiefile
 Users/perms
 
+Licenses/data
+
 # ignore another file
 Inventory/-H
 Agreements/-H
