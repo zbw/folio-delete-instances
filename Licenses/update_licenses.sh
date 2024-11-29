@@ -35,26 +35,21 @@ jq --arg replace "$replace" \
     "$data_file_replaced" >"$data_file_replaced_matched"
 echo "Step 2: Filtered matched records: $data_file_replaced_matched"
 
-# Step 3: Extract UUIDs
-#mkdir -p "$(dirname "$uuid_file")" # Ensure the directory exists
-#jq 'map(.id)' "$data_file_replaced_matched" >"$uuid_file"
-#echo "Step 3: UUIDs extracted to: $uuid_file"
-
-# Step 4: Split into separate files, one per record
+# Step 3: Split into separate files, one per record
 jq -c '.[]' "$data_file_replaced_matched" | nl -nln | while read -r index json; do
     mkdir -p "${records_dir}"
     echo "$json" >"${records_dir}/record_${index}.json"
 done
 echo "Step 4: Split files created for each matched record."
 
-# Step 5: PUT to API
+# Step 4: PUT to API
 for json_file in "${records_dir}"/*.json; do
     uuid=$(jq -r '.id' "$json_file")
     if [[ -z "$uuid" ]]; then
-        echo "Fehler: Keine UUID in der Datei $json_file gefunden."
+        echo "Error: No UUID found in the file $json_file."
         continue
     fi
-    echo "Verarbeite Datei $json_file mit UUID $uuid"
+    echo "Processing file $json_file with UUID $uuid"
 
     echo "Endpoint: ${okapi_url}/${endpoint}"
     echo "Request: ${okapi_url}/${endpoint}/${uuid}"
@@ -64,6 +59,6 @@ for json_file in "${records_dir}"/*.json; do
         --header "Content-Type: application/json" \
         --data @"$json_file"
 
-    echo "PUT-Request für UUID $uuid gesendet."
+    echo "PUT request sent for UUID $uuid."
 
 done
