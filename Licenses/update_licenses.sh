@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Initialize variables
-search="EOWYN"
-replace="ENTERPRISE"
+search="ENTERPRISE"
+replace="EOWYN"
 timestamp=$(date +%Y%m%d_%H%M%S)
 
 # OKAPI information
@@ -42,23 +42,32 @@ jq -c '.[]' "$data_file_replaced_matched" | nl -nln | while read -r index json; 
 done
 echo "Step 4: Split files created for each matched record."
 
-# Step 4: PUT to API
-for json_file in "${records_dir}"/*.json; do
-    uuid=$(jq -r '.id' "$json_file")
-    if [[ -z "$uuid" ]]; then
-        echo "Error: No UUID found in the file $json_file."
-        continue
-    fi
-    echo "Processing file $json_file with UUID $uuid"
+read -p "Are you sure you want to UPDATE these licenses? Then type \"y\" to proceed: " -n 1 -r
+echo # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 
-    echo "Endpoint: ${okapi_url}/${endpoint}"
-    echo "Request: ${okapi_url}/${endpoint}/${uuid}"
+    # Step 4: PUT to API
+    for json_file in "${records_dir}"/*.json; do
+        uuid=$(jq -r '.id' "$json_file")
+        if [[ -z "$uuid" ]]; then
+            echo "Error: No UUID found in the file $json_file."
+            continue
+        fi
+        echo "Processing file $json_file with UUID $uuid"
 
-    curl -s --location --request PUT "${okapi_url}/${endpoint}/${uuid}" \
-        --header "Cookie: folioAccessToken=${okapi_token}" \
-        --header "Content-Type: application/json" \
-        --data @"$json_file"
+        echo "Endpoint: ${okapi_url}/${endpoint}"
+        echo "Request: ${okapi_url}/${endpoint}/${uuid}"
 
-    echo "PUT request sent for UUID $uuid."
+        curl -s --location --request PUT "${okapi_url}/${endpoint}/${uuid}" \
+            --header "Cookie: folioAccessToken=${okapi_token}" \
+            --header "Content-Type: application/json" \
+            --data @"$json_file"
 
-done
+        echo "PUT request sent for UUID $uuid."
+
+    done
+
+else
+    echo "Operation aborted."
+
+fi
