@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Initialize variables
-offset=0
-batch_size=10
+page=1
+per_page=100
 all_data="[]"
 data_dir="data"
 timestamp=$(date +%Y%m%d_%H%M%S)
@@ -16,18 +16,18 @@ endpoint="/licenses/licenses"
 temp_file="response_temp.json"
 output_file="licenses_${timestamp}.json"
 
-
 # Function to get the next page
 fetch_data() {
-    curl --silent --location --header "Cookie: folioAccessToken=$okapi_token" "${okapi_url}${endpoint}?offset=$1" >"$temp_file"
+    curl --silent --location --header "Cookie: folioAccessToken=$okapi_token" \
+        "${okapi_url}${endpoint}?page=$1&perPage=$2" >"$temp_file"
 }
 
 # Loop for processing all data records
 while :; do
-    echo "Get data with offset $offset..."
+    echo "Fetching data for page $page with $per_page records per page..."
 
     # API call
-    fetch_data "$offset"
+    fetch_data "$page" "$per_page"
 
     # Check whether the answer is valid
     if ! jq empty "$temp_file" 2>/dev/null; then
@@ -44,17 +44,26 @@ while :; do
         break
     fi
 
-    # Insert data into the array
-    all_data=$(echo "$all_data" "$data" | jq -s 'add')
+    # Insert data into the array, remove duplicates
+    all_data=$(echo "$all_data" "$data" | jq -s 'add | unique_by(.id)')
 
-    # Increase offset
-    offset=$((offset + batch_size))
+    # Check if the number of records is less than per_page
+    current_batch_size=$(echo "$data" | jq '. | length')
+    if [ "$current_batch_size" -lt "$per_page" ]; then
+        echo "End reached: The last page contains fewer than $per_page entries."
+        break
+    fi
+
+    # Increment page
+    page=$((page + 1))
 done
 
 # Write the entire array to the output file
+all_data=$(echo "$all_data" | jq 'unique_by(.id)')
 echo "$all_data" >"$output_file"
 count=$(cat "$output_file" | jq -r '.[] | [.id] | @tsv' | wc -l)
-echo "$count records have been saved to $output_file."
+unique_count=$(cat "$output_file" | jq -r '.[] | [.id] | @tsv' | sort | uniq | wc -l)
+echo "$count records have been saved to $output_file ($unique_count are unique)."
 
 # Cleanup
 [ ! -d "$data_dir" ] && mkdir -p "$data_dir"
