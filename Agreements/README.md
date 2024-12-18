@@ -33,7 +33,7 @@ In case you already have a list of titleInstance UUID's you want to update, this
 2. You can send a PUT with the UUID's to ```/erm/titles``` by calling
 
 ```bash
-./update_titleInstance_url_by_uuid.sh <file with titleInstance UUID's>
+./update_titleInstance_suppressFromDiscovery_by_uuid.sh <file with titleInstance UUID's>
 ```
 
 2. You have to confirm the update before the request is being processed. The process is logged and the logs are written into a subdirectory ```log_updated_records```. It contains the JSON respone containing the updated values.
