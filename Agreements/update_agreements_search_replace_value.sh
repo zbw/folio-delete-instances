@@ -25,13 +25,13 @@ records_dir="data/records"
 
 # Step 1: Search and replace values in .supplementaryDocs[].location field
 jq --arg search "$search" --arg replace "$replace" \
-    'map(.supplementaryDocs |= map(if .location != null then .location |= gsub($search; $replace) else . end))' \
+    'map(.supplementaryDocs |= map(if .url != null then .url |= gsub($search; $replace) else . end))' \
     "$data_file" >"$data_file_replaced"
 echo "Step 1: Replaced file created: $data_file_replaced"
 
 # Step 2: Filter all records that have been touched in step 1
 jq --arg replace "$replace" \
-    'map(select(.supplementaryDocs[] | any(.location?; . != null and test($replace; "i"))))' \
+    'map(select(.supplementaryDocs[] | any(.url?; . != null and test($replace; "i"))))' \
     "$data_file_replaced" >"$data_file_replaced_matched"
 echo "Step 2: Filtered matched records: $data_file_replaced_matched"
 
