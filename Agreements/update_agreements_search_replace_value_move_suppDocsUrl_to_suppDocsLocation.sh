@@ -49,7 +49,7 @@ jq -c '.[]' "$data_file_replaced_matched" | nl -nln | while read -r index json; 
 done
 echo "Step 3: Split files created for each matched record."
 
-read -p "Are you sure you want to UPDATE these licenses? Then type \"y\" to proceed: " -n 1 -r
+read -p "Are you sure you want to UPDATE these agreements? Then type \"y\" to proceed: " -n 1 -r
 echo # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 
